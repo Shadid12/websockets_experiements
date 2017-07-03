@@ -11,8 +11,9 @@ app.get('/', function (req, res) {
 
 // socket io stuff
 io.on('connection', (o) => {
-   o.emit("server", () => {
-       greetings: 'Hello from server'
+   o.emit("server", "hello from server");
+   o.on('client', (msg) => {
+       console.log(msg);
    });
 });
 
