@@ -1,0 +1,53 @@
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<div class="container">
+    <div id="users"></div>
+    <form id="message-form">
+        <p>
+             <label>Username</label>
+             <input class="form-control" id="username" />
+        </p>
+        <p>
+            <label>Message</label>
+            <textarea class="form-control" id="message"></textarea>
+        </p>
+        <button class="btnbtn-primary" type="submit">Send</button>
+    </form>
+    <div id="messages"></div>
+</div>
+
+<script>
+$(document).ready(() => {
+const socket = io();
+
+$("#message-form").on("submit", (e) => {
+    e.preventDefault();
+    socket.emit("send", { msg: $("#message").val(),
+                          username: $("#username").val()
+        
+    });
+    $("#message").val("");
+    // $("#username").val("");
+    
+});
+
+socket.on('sent', (data) => {
+   $("#messages").append(`
+    <strong>${data.username} :</strong>
+    <span>${data.msg}</span>
+    <br />
+   `) 
+});
+
+socket.on('user.add', (id) => {
+    $("#users").prepend(`<p id=${id}>${id}</p>`)
+});
+
+socket.on('user.remove', (id) => {
+    $(`#${id}`).remove();
+});
+        
+});
+</script>
