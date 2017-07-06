@@ -3,7 +3,6 @@ const express = require("express"),
       http    = require("http").Server(app),
       io  = require("socket.io")(http);
 
-const rooms = ['SOFE', 'Banaa', 'Python', 'JS']
 
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/views/index.html');
